@@ -41,3 +41,22 @@ If you're using DHCP, go to IP -> DHCP Server -> Networks and set the DNS server
 # Docker Hub
 https://hub.docker.com/r/holynash/pihole-armv5
 Enjoy.
+
+# Runtime network interface
+
+At container startup, `start.sh` uses `PIHOLE_INTERFACE` from the environment
+when supplied. Otherwise it prefers an existing `veth1`, then the first UP
+interface other than loopback. The selected interface must exist; an invalid
+selection stops startup before configuration files are changed.
+
+The selected name is saved in `/etc/pihole/setupVars.conf`. For the `bind` and
+`single` listening modes, the `interface=` setting in dnsmasq is updated too.
+The `local` and `all` modes retain their existing dnsmasq configuration.
+
+Startup reports service errors and exits if FTL, lighttpd, or SSH cannot start.
+It does not monitor service health after startup.
+
+# Startup tests
+
+Run `python3 -m unittest discover -s tests -v`. Tests use temporary configuration
+files and mocked commands; they do not start services or require RouterOS.
