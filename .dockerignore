@@ -1,1 +1,8 @@
-.git
+**
+!Dockerfile
+!scripts/
+!scripts/**
+!patches/
+!patches/**
+!tests/
+!tests/test_event_atomic.c

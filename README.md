@@ -6,14 +6,6 @@ You can only run containers for the armv5 platform. [Thanks to them for the link
 
 Thanks to [article](https://podarok66.livejournal.com/24911.html) and the availability of the FTL v5.x binary, this solution allows to run pi-hole for the armv5 platform.
 
-# Source code used
-* [pi-hole-5.11.4](https://github.com/pi-hole/pi-hole/releases/tag/v5.11.4)
-Original [license](https://github.com/pi-hole/pi-hole/blob/master/LICENSE)
-* [FTL-5.16.1](https://github.com/pi-hole/FTL/releases/download/v5.16.1/pihole-FTL-armv5-linux-gnueabi)
-Original [license](https://github.com/pi-hole/FTL/blob/master/LICENSE)
-* [web-5.13](https://github.com/pi-hole/web/releases/tag/v5.13)
-Original [license](https://github.com/pi-hole/pi-hole/blob/master/LICENSE)
-
 # Default WEB password
 
 ```
