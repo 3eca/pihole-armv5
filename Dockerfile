@@ -6,8 +6,8 @@ WORKDIR /data
 
 RUN apt update && \
     apt install -y openssh-server sudo vim && \
-    /bin/bash local-install.sh \
-    /bin/bash make_ssh_user.sh \
+    /bin/bash local-install.sh && \
+    /bin/bash make_ssh_user.sh && \
     apt clean && \
     apt autoclean && \
     apt autoremove --yes && \
