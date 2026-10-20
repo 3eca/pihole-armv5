@@ -1,0 +1,48 @@
+--- a/src/events.c
++++ b/src/events.c
+@@ -13,7 +13,7 @@
+ // public prototypes
+ #include "events.h"
+ // atomic_exchange()
+-#include <stdatomic.h>
++#include "event_atomic.h"
+ // struct config
+ #include "config/config.h"
+ // logging
+@@ -26,8 +26,7 @@
+ // An atomic_bool rather than an atomic_flag: a flag cannot be read without
+ // setting it. RELOAD_GRAVITY is raised from the SIGRTMIN handler, so the type
+ // has to be lock-free for the exchange to be async-signal-safe
+-static _Atomic bool eventqueue[EVENTS_MAX];
+-static_assert(ATOMIC_BOOL_LOCK_FREE == 2, "Event queue must be lock-free, it is used from a signal handler");
++static event_slot_t eventqueue[EVENTS_MAX];
+ 
+ // Set/Request event
+ // We set the events atomically to ensure no race collisions can happen. If an
+@@ -36,7 +35,7 @@
+ void _set_event(const enum events event, int line, const char *function, const char *file)
+ {
+ 	// Set eventqueue bit, learning what it was in the same operation
+-	const bool is_set = atomic_exchange(&eventqueue[event], true);
++	const bool is_set = event_exchange(&eventqueue[event], true);
+ 
+ 	// Possible debug logging
+ 	if(config.debug.events.v.b)
+@@ -56,7 +55,7 @@
+ // exchange on its own: the event is logged where it is processed anyway
+ void set_event_from_signal(const enum events event)
+ {
+-	atomic_exchange(&eventqueue[event], true);
++	event_exchange(&eventqueue[event], true);
+ }
+ 
+ // Get and clear event
+@@ -66,7 +65,7 @@
+ bool _get_and_clear_event(const enum events event, int line, const char *function, const char *file)
+ {
+ 	// Read the bit and clear it in the same operation
+-	const bool is_set = atomic_exchange(&eventqueue[event], false);
++	const bool is_set = event_exchange(&eventqueue[event], false);
+ 
+ 	// Possible debug logging only for SET status, to avoid log file flooding with NOT SET messages
+ 	if(is_set && config.debug.events.v.b)
